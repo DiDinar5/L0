@@ -23,7 +23,13 @@ const (
 
 func main() {
 	myCache := cache.NewCache()
-	myCache.RestoreCacheFromDB()
+	if repo.HasOrdersInDB() {
+		myCache.RestoreCacheFromDB()
+		log.Println("Cache saved successful")
+	} else {
+		log.Println("No data")
+	}
+
 	sc, err := stan.Connect(ClusterID, ClientID, stan.NatsURL(NatsURL))
 	log.Println("Successfully connected to nats-streaming from consumer")
 	if err != nil {
